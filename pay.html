@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Payment Details | GAMING X LIGHT</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+(function(){ emailjs.init("Jq3n4jPZiiiwdgY7_"); })();
+</script>
+
+<style>
+body {
+  margin:0;
+  font-family:Arial;
+  background:radial-gradient(circle at top,#1c1030,#0b0b0f 65%);
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+}
+.container{
+  width:100%;
+  max-width:420px;
+  background:#141414;
+  padding:25px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 0 25px rgba(168,85,247,.5);
+  text-align:center;
+}
+.logo{
+  width:90px;
+  margin-bottom:15px;
+}
+h2{margin-bottom:20px}
+input,select,button{
+  width:100%;
+  padding:14px;
+  margin-bottom:14px;
+  border-radius:12px;
+  border:none;
+  font-size:14px;
+  outline:none;
+}
+input,select{
+  background:#0f0f0f;
+  color:#fff;
+}
+button{
+  background:#a855f7;
+  color:#000;
+  font-weight:800;
+  cursor:pointer;
+}
+button:disabled{
+  opacity:.6;
+}
+small{opacity:.6;}
+.btn{
+  display:inline-block;
+  padding:14px 22px;
+  background:#a855f7;
+  color:#000;
+  font-weight:800;
+  border-radius:12px;
+  text-decoration:none;
+}
+.btn-outline{
+  display:inline-block;
+  padding:12px 20px;
+  border:2px solid #a855f7;
+  color:#a855f7;
+  border-radius:12px;
+  text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <img src="logo.png" class="logo" alt="GAMING X LIGHT">
+
+  <form id="orderForm">
+    <h2>Submit Payment Details</h2>
+
+    <input type="text" id="product" readonly placeholder="Product Name">
+
+    <input type="text" id="utr" placeholder="Payment UTR / Transaction ID" required>
+    <input type="text" id="uid" placeholder="Guild UID" required>
+
+    <select id="region">
+      <option>🇮🇳 India</option>
+      <option>🌍 Other</option>
+    </select>
+
+    <input type="text" id="telegram" placeholder="Telegram Username" required>
+    <input type="tel" id="whatsapp" placeholder="WhatsApp Number" required>
+    <input type="email" id="email" placeholder="Your Email Address" required>
+
+    <button type="submit" id="submitBtn">SUBMIT ORDER</button>
+    <small>Please wait 10–30 minutes after submission.</small>
+  </form>
+
+  <!-- SUCCESS -->
+  <div id="successBox" style="display:none;">
+    <h2 style="color:#00ffcc;">✅ ORDER RECEIVED</h2>
+    <p>Your order has been received.<br>Please wait <b>10–30 minutes</b>.</p>
+
+    <a href="index.html" class="btn">⬅ Back to Home</a><br><br>
+    <a href="https://t.me/Gameralsor" target="_blank" class="btn-outline">
+      💬 Telegram Support
+    </a>
+  </div>
+</div>
+
+<script>
+// ===== URL PARAMS =====
+const params = new URLSearchParams(window.location.search);
+const product = params.get("product");
+const price = params.get("price");
+
+if(!product || !price){
+  alert("Invalid access!");
+  location.href="index.html";
+}
+document.getElementById("product").value =
+  decodeURIComponent(product) + " - ₹" + price;
+
+// ===== TELEGRAM CONFIG =====
+const BOT_TOKEN = "8282483005:AAG7BXK-T7EcXWIi_rTcWvNBbCCBTW2syOA";
+const CHAT_ID = "6985037539";
+
+// ===== GET FORM ELEMENTS =====
+const orderForm = document.getElementById("orderForm");
+const utr = document.getElementById("utr");
+const uid = document.getElementById("uid");
+const region = document.getElementById("region");
+const telegram = document.getElementById("telegram");
+const whatsapp = document.getElementById("whatsapp");
+const email = document.getElementById("email");
+const submitBtn = document.getElementById("submitBtn");
+const successBox = document.getElementById("successBox");
+
+// ===== SUBMIT HANDLER =====
+orderForm.addEventListener("submit", async e=>{
+  e.preventDefault();
+
+  submitBtn.disabled = true;
+  submitBtn.innerText = "PLEASE WAIT...";
+
+  const orderId = "GX-" + Date.now();
+
+  const data = {
+    order_id: orderId,
+    product: decodeURIComponent(product),
+    price: price,
+    utr: utr.value,
+    uid: uid.value,
+    region: region.value,
+    telegram: telegram.value,
+    whatsapp: whatsapp.value,
+    email: email.value
+  };
+
+  try{
+    // ✅ TELEGRAM MESSAGE
+    const message = `
+🛒 NEW ORDER RECEIVED
+
+🆔 Order ID: ${orderId}
+📦 Product: ${data.product}
+💰 Price: ₹${data.price}
+
+🎮 Guild UID: ${data.uid}
+🌍 Region: ${data.region}
+
+📱 WhatsApp: ${data.whatsapp}
+💬 Telegram: ${data.telegram}
+📧 Email: ${data.email}
+`;
+
+    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        chat_id:CHAT_ID,
+        text:message
+      })
+    });
+
+    // ✅ EMAIL TO CUSTOMER ONLY
+    await emailjs.send(
+      "service_9xrns3y",
+      "customer_reply",
+      data
+    );
+
+    // ✅ SAVE ORDER TO LOCALSTORAGE
+    let allOrders = JSON.parse(localStorage.getItem("orders") || "[]");
+    allOrders.push(data);
+    localStorage.setItem("orders", JSON.stringify(allOrders));
+
+    // SHOW SUCCESS
+    orderForm.style.display="none";
+    successBox.style.display="block";
+
+  }catch(err){
+    console.error(err);
+    alert("❌ Error! Try again later.");
+    submitBtn.disabled = false;
+    submitBtn.innerText = "SUBMIT ORDER";
+  }
+});
+</script>
+
+</body>
+</html>
