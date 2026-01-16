@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GAMING X LIGHT Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --purple:#a855f7;
+  --border:rgba(255,255,255,.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:radial-gradient(circle at top,#1c1030,#0b0b0f 65%);
+  color:#fff;
+}
+
+/* ===== HERO ===== */
+.hero{
+  text-align:center;
+  padding:50px 16px 20px;
+}
+.hero img{
+  width:90px;
+  margin-bottom:12px;
+}
+.hero h1{
+  margin:0;
+  font-size:36px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+.hero h1 span{color:var(--purple)}
+.subtitle{opacity:.75;margin-top:6px}
+.divider{
+  width:80%;
+  max-width:420px;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--purple),transparent);
+  margin:20px auto;
+}
+
+/* ===== PRODUCTS ===== */
+.section-title{text-align:center;padding:30px 0}
+.wrap{
+  max-width:720px;
+  margin:auto;
+  padding:16px;
+}
+.card{
+  background:#141414;
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:24px;
+  border:1px solid var(--border);
+}
+.badge{
+  background:var(--purple);
+  color:#000;
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:6px;
+  font-size:12px;
+  font-weight:800;
+}
+.price{
+  font-size:34px;
+  color:var(--purple);
+  font-weight:900;
+}
+.buy{
+  display:block;
+  text-align:center;
+  margin-top:15px;
+  padding:14px;
+  border-radius:10px;
+  border:2px solid var(--purple);
+  color:var(--purple);
+  text-decoration:none;
+  font-weight:800;
+}
+.buy:hover{
+  background:var(--purple);
+  color:#000;
+}
+
+/* ===== LINKS ===== */
+.links{text-align:center;padding:40px 16px}
+.link-btn{
+  display:block;
+  max-width:320px;
+  margin:12px auto;
+  padding:14px;
+  border-radius:12px;
+  background:#141414;
+  border:1px solid var(--border);
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+}
+.link-btn:hover{border-color:var(--purple)}
+
+footer{
+  text-align:center;
+  opacity:.5;
+  font-size:12px;
+  padding:14px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <img src="logo.png" alt="Logo">
+  <h1>GAMING X <span>LIGHT</span></h1>
+  <p class="subtitle">Premium Free Fire Tools & Bots</p>
+  <div class="divider"></div>
+</div>
+
+<!-- ===== PRODUCTS ===== -->
+<div class="section-title">
+  <h2>GUILD GLORY BOT PLANS</h2>
+</div>
+
+<div class="wrap" id="products"></div>
+
+<!-- ===== OFFICIAL LINKS ===== -->
+<div class="links">
+  <h2>OFFICIAL LINKS</h2>
+
+  <a class="link-btn" href="https://www.youtube.com/@shah_emam_raja" target="_blank">
+    ▶ YouTube : GAMING X LIGHT
+  </a>
+
+  <a class="link-btn" href="https://t.me/glorybotsellproof" target="_blank">
+    📢 Proof Channel
+  </a>
+
+  <a class="link-btn" href="https://t.me/Gameralsor" target="_blank">
+    🛠 Admin Support
+  </a>
+</div>
+
+<footer>© 2026 GAMING X LIGHT Store</footer>
+
+<!-- ===== PRODUCTS SCRIPT ===== -->
+<script src="product.js"></script>
+<script>
+const wrap = document.getElementById("products");
+
+PRODUCTS.forEach(p=>{
+  wrap.innerHTML += `
+  <div class="card">
+    <span class="badge">${p.badge}</span>
+    <h3>${decodeURIComponent(p.name)}</h3>
+    <div class="price">₹${p.price}</div>
+    <ul>${p.features.map(f=>`<li>✓ ${f}</li>`).join("")}</ul>
+    <a class="buy" onclick="buy('${encodeURIComponent(p.name)}',${p.price})">
+      BUY NOW
+    </a>
+  </div>`;
+});
+
+function buy(name,price){
+  window.location.href = "qr.html?product="+name+"&price="+price;
+}
+</script>
+
+<!-- ===== DEVELOPER TELEGRAM BUTTON ===== -->
+<a href="https://t.me/aura_x_cheats" target="_blank" 
+   style="position:fixed; bottom:20px; right:20px; background:#a855f7; color:#fff; 
+          padding:12px 18px; border-radius:50px; font-weight:bold; text-decoration:none; 
+          box-shadow:0 4px 10px rgba(168,85,247,0.6); z-index:9999; transition: all 0.3s ease;">
+   💬 Developer
+</a>
+
+<style>
+a[href="https://t.me/aura_x_cheats"]:hover {
+  box-shadow: 0 0 10px #facc15, 0 0 25px #a855f7;
+  transform: scale(1.05);
+}
+</style>
+
+</body>
+</html>
